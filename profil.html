@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile — Classic Games</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style-profil.css">
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="index.html" class="logo">🎮 Klasyczne Gry</a>
+            <div class="nav-right">
+                <div class="language-selector">
+                    <button class="lang-btn active" data-lang="pl" onclick="changeLanguage('pl')">🇵🇱</button>
+                    <button class="lang-btn" data-lang="en" onclick="changeLanguage('en')">🇬🇧</button>
+                    <button class="lang-btn" data-lang="de" onclick="changeLanguage('de')">🇩🇪</button>
+                </div>
+                <div class="user-section" id="userSection">
+                    <div class="user-view" id="userView">
+                        <span class="username" id="username">Gracz</span>
+                        <div class="profile-avatar-nav" id="profileAvatar" onclick="toggleProfileMenu()">
+                            <img src="" alt="Avatar" id="avatarImg">
+                            <div class="online-dot"></div>
+                        </div>
+                        <div class="profile-dropdown" id="profileDropdown">
+                            <div class="dropdown-header">
+                                <img src="" alt="Avatar" id="dropdownAvatar">
+                                <div>
+                                    <div class="dropdown-username" id="dropdownUsername">Gracz</div>
+                                    <div class="dropdown-email" id="dropdownEmail">email@example.com</div>
+                                </div>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <a href="profil.html" class="dropdown-item active">👤 Mój profil</a>
+                            <a href="index.html" class="dropdown-item">🏠 Strona główna</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item logout" onclick="logout()">🚪 Wyloguj się</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="profile-container">
+
+        <!-- KARTA PROFILU -->
+        <div class="profile-card">
+            <div class="profile-banner" id="profileBanner">
+                <button class="change-banner-btn" onclick="openBannerSelector()" title="Zmień baner">🎨 Zmień baner</button>
+            </div>
+            <div class="profile-avatar-wrap">
+                <div class="profile-avatar-large" onclick="openAvatarSelector()">
+                    <img src="" alt="Avatar" id="profileAvatarLarge">
+                    <div class="avatar-overlay">📷</div>
+                </div>
+            </div>
+            <div class="profile-info">
+                <div class="profile-name-row">
+                    <h1 class="profile-name" id="profileDisplayName">Gracz</h1>
+                    <button class="edit-btn" onclick="openNameEditor()" title="Edytuj">✏️</button>
+                </div>
+                <p class="profile-email" id="profileEmail">email@example.com</p>
+                <p class="profile-joined">Dołączył: <span id="profileJoined">—</span></p>
+                <div class="status-badge" id="statusBadge">
+                    <span id="statusIcon">🎮</span>
+                    <span id="statusText">Aktywny gracz</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATYSTYKI -->
+        <div class="section-block">
+            <div class="section-label">STATYSTYKI</div>
+            <div class="stats-grid">
+                <div class="stats-card stats-total">
+                    <div class="stats-head"><span>🏆</span><h3>Łącznie</h3></div>
+                    <div class="stats-body stats-body-4">
+                        <div class="stat-box"><span class="stat-val" id="totalPoints">0</span><span class="stat-lbl">Punkty</span></div>
+                        <div class="stat-box"><span class="stat-val" id="totalWins">0</span><span class="stat-lbl">Wygrane</span></div>
+                        <div class="stat-box"><span class="stat-val" id="totalGames">0</span><span class="stat-lbl">Gry</span></div>
+                        <div class="stat-box"><span class="stat-val" id="winRate">0%</span><span class="stat-lbl">Win rate</span></div>
+                    </div>
+                </div>
+
+                <div class="stats-card">
+                    <div class="stats-head"><span>⭕❌</span><h3>Kółko i Krzyżyk</h3></div>
+                    <div class="stats-body">
+                        <div class="stat-box"><span class="stat-val accent-cyan" id="tttPoints">0</span><span class="stat-lbl">Punkty</span></div>
+                        <div class="stat-box"><span class="stat-val accent-green" id="tttWins">0</span><span class="stat-lbl">Wygrane</span></div>
+                        <div class="stat-box"><span class="stat-val accent-red" id="tttLosses">0</span><span class="stat-lbl">Przegrane</span></div>
+                        <div class="stat-box"><span class="stat-val" id="tttDraws">0</span><span class="stat-lbl">Remisy</span></div>
+                    </div>
+                    <div class="progress-wrap">
+                        <div class="progress-bar"><div class="progress-fill fill-cyan" id="tttProgress"></div></div>
+                        <span class="progress-lbl" id="tttWinRate">0% wygranych</span>
+                    </div>
+                </div>
+
+                <div class="stats-card">
+                    <div class="stats-head"><span>🚢</span><h3>Statki</h3></div>
+                    <div class="stats-body">
+                        <div class="stat-box"><span class="stat-val accent-cyan" id="bsPoints">0</span><span class="stat-lbl">Punkty</span></div>
+                        <div class="stat-box"><span class="stat-val accent-green" id="bsWins">0</span><span class="stat-lbl">Wygrane</span></div>
+                        <div class="stat-box"><span class="stat-val accent-red" id="bsLosses">0</span><span class="stat-lbl">Przegrane</span></div>
+                        <div class="stat-box"><span class="stat-val" id="bsAccuracy">0%</span><span class="stat-lbl">Celność</span></div>
+                    </div>
+                    <div class="progress-wrap">
+                        <div class="progress-bar"><div class="progress-fill fill-green" id="bsProgress"></div></div>
+                        <span class="progress-lbl" id="bsWinRate">0% wygranych</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OSIĄGNIĘCIA -->
+        <div class="section-block">
+            <div class="section-label">OSIĄGNIĘCIA</div>
+            <div class="achievements-grid" id="achievementsGrid"></div>
+        </div>
+
+        <!-- ZNAJOMI -->
+        <div class="section-block">
+            <div class="section-label">ZNAJOMI <span class="soon-tag">WKRÓTCE</span></div>
+            <div class="friends-placeholder">
+                <div class="placeholder-icon">👥</div>
+                <p>System znajomych będzie dostępny wkrótce!</p>
+                <p class="placeholder-sub">Będziesz mógł dodawać znajomych i rywalizować z nimi.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MODAL: AVATAR -->
+    <div class="modal" id="avatarModal">
+        <div class="modal-box">
+            <div class="modal-head">
+                <h2>Wybierz Avatar</h2>
+                <button class="modal-close" onclick="closeAvatarSelector()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="avatar-tabs">
+                    <button class="avatar-tab active" onclick="switchAvatarTab('default')">Domyślne</button>
+                    <button class="avatar-tab" onclick="switchAvatarTab('gaming')">Gaming</button>
+                    <button class="avatar-tab" onclick="switchAvatarTab('animals')">Zwierzęta</button>
+                    <button class="avatar-tab" onclick="switchAvatarTab('custom')">Własny URL</button>
+                </div>
+                <div class="avatar-grid" id="avatarGrid"></div>
+                <div class="custom-url-input" id="customAvatarInput" style="display:none;">
+                    <input type="url" id="customAvatarUrl" placeholder="Wklej URL obrazka...">
+                    <button class="btn-accent" onclick="setCustomAvatar()">Zastosuj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: NAZWA -->
+    <div class="modal" id="nameModal">
+        <div class="modal-box modal-small">
+            <div class="modal-head">
+                <h2>Zmień nazwę</h2>
+                <button class="modal-close" onclick="closeNameEditor()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Nowa nazwa:</label>
+                    <div class="input-wrap">
+                        <input type="text" id="newUsername" maxlength="20" placeholder="Wpisz nową nazwę...">
+                        <span class="char-count"><span id="charCount">0</span>/20</span>
+                    </div>
+                </div>
+                <div class="name-rules">
+                    <p>📌 Zasady:</p>
+                    <ul>
+                        <li>3–20 znaków</li>
+                        <li>Litery, cyfry i podkreślenia</li>
+                    </ul>
+                </div>
+                <button class="btn-accent" onclick="saveNewUsername()">Zapisz</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: BANER -->
+    <div class="modal" id="bannerModal">
+        <div class="modal-box">
+            <div class="modal-head">
+                <h2>Wybierz Baner</h2>
+                <button class="modal-close" onclick="closeBannerSelector()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="banner-grid" id="bannerGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOASTY -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <footer><p>© 2025 Klasyczne Gry | Stworzone z ❤️ dla miłośników retro gier</p></footer>
+
+    <script>
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        resize(); window.addEventListener('resize', resize);
+        const pts = Array.from({length:50}, () => ({
+            x: Math.random()*window.innerWidth, y: Math.random()*window.innerHeight,
+            dx:(Math.random()-.5)*.3, dy:(Math.random()-.5)*.3, a:Math.random()
+        }));
+        (function draw() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            pts.forEach(p => {
+                ctx.beginPath(); ctx.arc(p.x,p.y,1.2,0,Math.PI*2);
+                ctx.fillStyle=`rgba(0,212,255,${p.a*.5})`; ctx.fill();
+                p.x+=p.dx; p.y+=p.dy;
+                if(p.x<0)p.x=canvas.width; if(p.x>canvas.width)p.x=0;
+                if(p.y<0)p.y=canvas.height; if(p.y>canvas.height)p.y=0;
+            });
+            requestAnimationFrame(draw);
+        })();
+    </script>
+    <script type="module" src="translations.js"></script>
+    <script type="module" src="profil.js"></script>
+</body>
+</html>

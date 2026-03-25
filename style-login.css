@@ -1,0 +1,298 @@
+/* style-login.css — Dark Arcade Pro */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg: #050b18;
+    --bg2: #0a1628;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --green: #00ff88;
+    --red: #ff4466;
+    --text: #e2e8f0;
+    --text-dim: #64748b;
+    --border: rgba(0,212,255,0.15);
+    --card-bg: rgba(10,22,40,0.92);
+    --font-display: 'Orbitron', monospace;
+    --font-body: 'Rajdhani', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+#bg-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at 30% 50%, #0d1f3c 0%, #050b18 60%);
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* ===== LANGUAGE ===== */
+.language-selector-top {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    gap: 4px;
+    background: rgba(5,11,24,0.95);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 5px;
+    backdrop-filter: blur(10px);
+}
+
+.lang-btn {
+    width: 38px; height: 38px;
+    border: 1px solid transparent;
+    background: transparent;
+    font-size: 1.2em;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lang-btn:hover { background: rgba(0,212,255,0.1); transform: scale(1.1); }
+.lang-btn.active { background: rgba(0,212,255,0.15); border-color: var(--accent); }
+
+/* ===== CONTAINER ===== */
+.login-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 440px;
+    padding: 16px;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9em;
+    margin-bottom: 20px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+}
+
+.back-btn:hover {
+    background: rgba(0,212,255,0.08);
+    transform: translateX(-3px);
+}
+
+/* ===== LOGIN BOX ===== */
+.login-box {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px 32px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 60px rgba(0,212,255,0.05);
+    animation: boxIn 0.5s ease both;
+}
+
+@keyframes boxIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.login-logo {
+    font-size: 2.5em;
+    text-align: center;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 0 20px rgba(0,212,255,0.4));
+}
+
+.login-box h1 {
+    font-family: var(--font-display);
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: 900;
+    margin-bottom: 6px;
+    background: linear-gradient(135deg, #fff, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 0.05em;
+}
+
+.subtitle {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.95em;
+    font-weight: 500;
+    margin-bottom: 24px;
+}
+
+/* ===== TABS ===== */
+.tabs {
+    display: flex;
+    gap: 0;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 24px;
+}
+
+.tab {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    padding: 10px;
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-size: 0.65em;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tab:hover { color: var(--text); }
+
+.tab.active {
+    background: rgba(0,212,255,0.12);
+    color: var(--accent);
+    border: 1px solid rgba(0,212,255,0.3);
+    box-shadow: 0 0 15px rgba(0,212,255,0.1);
+}
+
+/* ===== FORM ===== */
+.form { display: none; }
+.form.active { display: block; }
+
+.input-group {
+    margin-bottom: 16px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 0.9em;
+    color: var(--text-dim);
+    letter-spacing: 0.02em;
+}
+
+.input-wrap {
+    position: relative;
+}
+
+.input-group input,
+.input-wrap input {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 1em;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.input-group input:focus,
+.input-wrap input:focus {
+    outline: none;
+    border-color: rgba(0,212,255,0.4);
+    background: rgba(0,212,255,0.04);
+    box-shadow: 0 0 0 3px rgba(0,212,255,0.08);
+}
+
+.show-pw {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.show-pw:hover { opacity: 1; }
+
+.submit-btn {
+    width: 100%;
+    background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(124,58,237,0.2));
+    border: 1px solid rgba(0,212,255,0.4);
+    color: var(--accent);
+    padding: 13px;
+    border-radius: 10px;
+    font-family: var(--font-display);
+    font-size: 0.7em;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    transition: all 0.25s;
+    margin-top: 4px;
+}
+
+.submit-btn:hover:not(:disabled) {
+    background: var(--accent);
+    color: var(--bg);
+    box-shadow: 0 0 25px rgba(0,212,255,0.4);
+    border-color: var(--accent);
+}
+
+.submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.message {
+    margin-top: 14px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.9em;
+    min-height: 22px;
+    letter-spacing: 0.01em;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--bg2); border-radius: 3px; }
+
+::selection { background: rgba(0,212,255,0.2); color: white; }
+
+@media (max-width: 480px) {
+    .login-box { padding: 28px 20px; }
+    .login-container { padding: 12px; }
+}

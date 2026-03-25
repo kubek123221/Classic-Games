@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stwórz Grę — Klasyczne Gry</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style-host.css">
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="index.html" class="logo">🎮 Klasyczne Gry</a>
+            <div class="nav-right">
+                <span class="username" id="username-nav">Gość</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="kolko-i-krzyzyk.html" class="back-btn">← Powrót do gry</a>
+
+        <div class="page-header">
+            <div class="page-tag">HOST PANEL</div>
+            <h1>🎮 Stwórz Grę Online</h1>
+            <p class="subtitle">Skonfiguruj swoją grę i zaproś graczy!</p>
+        </div>
+
+        <div class="host-panel">
+
+            <!-- USTAWIENIA -->
+            <div class="panel-section">
+                <div class="section-label">USTAWIENIA PODSTAWOWE</div>
+
+                <div class="field-group">
+                    <label>Nazwa gry</label>
+                    <input type="text" id="gameName" placeholder="Moja gra..." maxlength="30">
+                </div>
+
+                <div class="field-group">
+                    <label>Widoczność</label>
+                    <div class="toggle-row">
+                        <button class="toggle-btn active" onclick="setVisibility('public')" id="publicBtn">🌐 Publiczna</button>
+                        <button class="toggle-btn" onclick="setVisibility('private')" id="privateBtn">🔒 Prywatna</button>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label>Liczba graczy</label>
+                    <div class="toggle-row">
+                        <button class="count-btn active" onclick="setMaxPlayers(2)" id="players2">👥 2 graczy</button>
+                        <button class="count-btn" onclick="setMaxPlayers(3)" id="players3" disabled>👥 3 graczy</button>
+                    </div>
+                    <p class="field-hint">💡 3 graczy dostępne tylko z modyfikacją "Trzeci gracz"</p>
+                </div>
+            </div>
+
+            <!-- MODYFIKACJE -->
+            <div class="panel-section">
+                <div class="section-label">MODYFIKACJE <span class="beta-tag">BETA</span></div>
+                <p class="section-desc">Wybierz modyfikacje dla tej gry (tylko Host)</p>
+                <div class="mods-grid">
+                    <label class="mod-item"><input type="checkbox" id="host-mod-bigger">📏 Większa plansza (5×5)</label>
+                    <label class="mod-item"><input type="checkbox" id="host-mod-blocks">🚫 Losowe bloki</label>
+                    <label class="mod-item"><input type="checkbox" id="host-mod-timer">⏱️ Czas na ruch</label>
+                    <label class="mod-item"><input type="checkbox" id="host-mod-powerups">⚡ Power-upy</label>
+                    <label class="mod-item"><input type="checkbox" id="host-mod-rotating">🔄 Obracająca plansza</label>
+                    <label class="mod-item"><input type="checkbox" id="host-mod-3d">🎲 Tryb 3D</label>
+                    <label class="mod-item"><input type="checkbox" id="host-mod-shuffle">🌀 Losowe przesunięcie</label>
+                    <label class="mod-item"><input type="checkbox" id="host-mod-dynamic">🏃 Dynamiczne ruchy</label>
+                    <label class="mod-item"><input type="checkbox" id="host-mod-third" onchange="toggleThirdPlayer()">🔺 Trzeci gracz</label>
+                    <label class="mod-item"><input type="checkbox" id="host-mod-battle">⚔️ Tryb bitwy</label>
+                    <label class="mod-item"><input type="checkbox" id="host-mod-theme">🎨 Motywy</label>
+                    <label class="mod-item"><input type="checkbox" id="host-mod-memory">🧠 Tryb pamięci</label>
+                    <label class="mod-item"><input type="checkbox" id="host-mod-chaos">😈 Tryb oszusta</label>
+                </div>
+            </div>
+
+            <!-- TRZECI GRACZ -->
+            <div class="panel-section" id="thirdPlayerSection" style="display:none;">
+                <div class="section-label">TRZECI GRACZ</div>
+                <div class="toggle-row">
+                    <button class="toggle-btn active" onclick="setThirdPlayerType('bot')" id="thirdBot">🤖 Bot (AI)</button>
+                    <button class="toggle-btn" onclick="setThirdPlayerType('player')" id="thirdPlayer">👤 Gracz</button>
+                </div>
+            </div>
+
+            <!-- GRACZE -->
+            <div class="panel-section">
+                <div class="section-label">GRACZE W POKOJU</div>
+                <div class="players-list" id="invitedPlayers">
+                    <div class="player-slot">
+                        <span class="slot-crown">👑</span>
+                        <span class="slot-name" id="hostName">Ty (Host)</span>
+                        <span class="slot-tag tag-ready">GOTOWY</span>
+                    </div>
+                    <div class="player-slot slot-empty">
+                        <span class="slot-crown">➕</span>
+                        <span class="slot-name">Puste miejsce</span>
+                        <button class="invite-btn" onclick="openInviteModal()">Zaproś gracza</button>
+                    </div>
+                    <div class="player-slot slot-empty" id="thirdSlot" style="display:none;">
+                        <span class="slot-crown">➕</span>
+                        <span class="slot-name">Puste miejsce (3 gracz)</span>
+                        <button class="invite-btn" onclick="openInviteModal()">Zaproś gracza</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AKCJE -->
+            <div class="action-row">
+                <button class="btn-create" onclick="createGame()">🎮 Stwórz Grę</button>
+                <button class="btn-cancel" onclick="window.location.href='kolko-i-krzyzyk.html'">✕ Anuluj</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ZAPROSZENIA -->
+    <div class="modal" id="inviteModal" style="display:none;">
+        <div class="modal-box">
+            <div class="modal-head">
+                <h2>Zaproś gracza</h2>
+                <button class="modal-close" onclick="closeInviteModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="playerSearch" placeholder="Szukaj po nicku (min. 3 znaki)..." oninput="searchPlayers()">
+                <div class="search-results" id="searchResults">
+                    <p class="no-results">Wpisz minimum 3 znaki...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        resize(); window.addEventListener('resize', resize);
+        const pts = Array.from({length:40}, () => ({
+            x: Math.random()*window.innerWidth, y: Math.random()*window.innerHeight,
+            dx:(Math.random()-.5)*.3, dy:(Math.random()-.5)*.3, a:Math.random()
+        }));
+        (function draw() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            pts.forEach(p => {
+                ctx.beginPath(); ctx.arc(p.x,p.y,1,0,Math.PI*2);
+                ctx.fillStyle=`rgba(0,212,255,${p.a*.4})`; ctx.fill();
+                p.x+=p.dx; p.y+=p.dy;
+                if(p.x<0)p.x=canvas.width; if(p.x>canvas.width)p.x=0;
+                if(p.y<0)p.y=canvas.height; if(p.y>canvas.height)p.y=0;
+            });
+            requestAnimationFrame(draw);
+        })();
+    </script>
+    <script type="module" src="Host_G.js"></script>
+</body>
+</html>

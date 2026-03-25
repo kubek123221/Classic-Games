@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klasyczne Gry — Strona Główna</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style-home.css">
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo" data-i18n="logo">🎮 Klasyczne Gry</div>
+            <div class="nav-right">
+
+                <!-- JĘZYK -->
+                <div class="language-selector">
+                    <button class="lang-btn active" data-lang="pl" onclick="changeLanguage('pl')" title="Polski">🇵🇱</button>
+                    <button class="lang-btn" data-lang="en" onclick="changeLanguage('en')" title="English">🇬🇧</button>
+                    <button class="lang-btn" data-lang="de" onclick="changeLanguage('de')" title="Deutsch">🇩🇪</button>
+                </div>
+
+                <!-- NIEZALOGOWANY -->
+                <button class="nav-btn" id="loginBtn"
+                        onclick="window.location.href='login.html'"
+                        data-i18n="login"
+                        style="display:none;">
+                    Zaloguj się
+                </button>
+
+                <!-- ZALOGOWANY — dropdown profilu -->
+                <div class="nav-profile-wrap" id="navProfileWrap" style="display:none;">
+                    <button class="nav-avatar-btn" onclick="toggleNavDropdown()">
+                        <div class="nav-avatar-circle" id="navAvatarCircle">G</div>
+                        <span class="nav-avatar-name" id="navUsername">Gracz</span>
+                        <span class="nav-avatar-arrow">▼</span>
+                    </button>
+                    <div class="nav-dropdown" id="navDropdown">
+                        <!-- Nagłówek z awatarem i danymi -->
+                        <div class="dd-header">
+                            <div class="dd-avatar" id="ddAvatarBig">G</div>
+                            <div class="dd-user-info">
+                                <div class="dd-name" id="ddName">Gracz</div>
+                                <div class="dd-email" id="ddEmail">email@example.com</div>
+                            </div>
+                        </div>
+                        <div class="dd-divider"></div>
+                        <a href="profil.html" class="dd-item active">👤 Mój profil</a>
+                        <a href="lobby.html"  class="dd-item">🌐 Lobby Online</a>
+                        <div class="dd-divider"></div>
+                        <button class="dd-item logout" onclick="logoutUser()">🚪 Wyloguj się</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-tag">RETRO ARCADE</div>
+        <h1 class="hero-title" data-i18n="heroTitle">Witaj w świecie<br>klasycznych gier!</h1>
+        <p class="hero-subtitle" data-i18n="heroSubtitle">Zagraj w legendarne gry, zdobywaj punkty i rywalizuj z przyjaciółmi</p>
+        <div class="hero-stats-bar">
+            <div class="hstat"><span class="hstat-num">2</span><span class="hstat-lbl">Gry</span></div>
+            <div class="hstat-div"></div>
+            <div class="hstat"><span class="hstat-num" id="tictactoe-wins">0</span><span class="hstat-lbl">Wygrane ⭕</span></div>
+            <div class="hstat-div"></div>
+            <div class="hstat"><span class="hstat-num" id="battleship-wins">0</span><span class="hstat-lbl">Wygrane 🚢</span></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- GRY -->
+        <div class="section-label">WYBIERZ GRĘ</div>
+        <div class="games-grid">
+
+            <div class="game-card available" onclick="window.location.href='kolko-i-krzyzyk.html'">
+                <div class="card-glow"></div>
+                <div class="game-badge" data-i18n="available">Dostępne</div>
+                <div class="game-icon-wrap">
+                    <div class="game-icon">⭕❌</div>
+                    <div class="game-icon-ring"></div>
+                </div>
+                <h2 data-i18n="tictactoe">Kółko i Krzyżyk</h2>
+                <p data-i18n="tictactoeDesc">Klasyczna gra strategiczna. Ułóż trzy symbole w rzędzie i wygraj!</p>
+                <div class="game-stats">
+                    <div class="gstat"><span class="gstat-icon">🏆</span><span><span id="tictactoe-wins-card">0</span> <span data-i18n="wins">wygranych</span></span></div>
+                    <div class="gstat"><span class="gstat-icon">⭐</span><span><span id="tictactoe-points">0</span> <span data-i18n="points">pkt</span></span></div>
+                </div>
+                <button class="play-btn"><span data-i18n="playNow">Zagraj teraz →</span><div class="btn-shine"></div></button>
+            </div>
+
+            <div class="game-card available" onclick="window.location.href='statki.html'">
+                <div class="card-glow card-glow-blue"></div>
+                <div class="game-badge badge-blue" data-i18n="available">Dostępne</div>
+                <div class="game-icon-wrap">
+                    <div class="game-icon">🚢</div>
+                    <div class="game-icon-ring ring-blue"></div>
+                </div>
+                <h2 data-i18n="battleship">Statki</h2>
+                <p data-i18n="battleshipDesc">Strategiczna bitwa morska. Zatop flotę przeciwnika!</p>
+                <div class="game-stats">
+                    <div class="gstat"><span class="gstat-icon">🏆</span><span><span id="battleship-wins-card">0</span> <span data-i18n="wins">wygranych</span></span></div>
+                    <div class="gstat"><span class="gstat-icon">⭐</span><span><span id="battleship-points">0</span> <span data-i18n="points">pkt</span></span></div>
+                </div>
+                <button class="play-btn play-btn-blue"><span data-i18n="playNow">Zagraj teraz →</span><div class="btn-shine"></div></button>
+            </div>
+
+            <div class="game-card coming-soon">
+                <div class="game-badge badge-soon" data-i18n="comingSoon">Wkrótce</div>
+                <div class="game-icon-wrap"><div class="game-icon game-icon-dim">🎯</div></div>
+                <h2 data-i18n="hangman">Wisielec</h2>
+                <p data-i18n="hangmanDesc">Odgadnij hasło zanim skończą się próby. Sprawdź swoją wiedzę!</p>
+                <div class="soon-badge" data-i18n="soonText">Już niedługo!</div>
+            </div>
+
+        </div>
+
+        <!-- ONLINE -->
+        <div class="online-section">
+            <div class="section-label">MULTIPLAYER ONLINE</div>
+            <div class="online-banner" onclick="window.location.href='lobby.html'">
+                <div class="online-banner-left">
+                    <div class="online-icon">🌐</div>
+                    <div>
+                        <div class="online-title">Graj Online z Innymi</div>
+                        <div class="online-sub">Kółko i Krzyżyk · Statki · Więcej wkrótce</div>
+                    </div>
+                </div>
+                <button class="online-play-btn" onclick="event.stopPropagation();window.location.href='lobby.html'">
+                    Otwórz Lobby →
+                </button>
+            </div>
+        </div>
+
+        <!-- RANKING -->
+        <div class="leaderboard-section">
+            <div class="section-label">RANKING</div>
+            <div class="leaderboard">
+                <div class="leaderboard-header">
+                    <h2 data-i18n="leaderboard">🏆 Ranking Graczy</h2>
+                    <button class="refresh-btn" onclick="loadLeaderboard()" title="Odśwież">↻</button>
+                </div>
+                <div class="leaderboard-list" id="leaderboard">
+                    <p class="loading-text">⏳ Ładowanie...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p data-i18n="footer">© 2025 Klasyczne Gry | Stworzone z ❤️ dla miłośników retro gier</p>
+    </footer>
+
+    <script>
+        /* ─── Canvas particles ─── */
+        const canvas = document.getElementById('bg-canvas');
+        const ctx    = canvas.getContext('2d');
+        function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+        resize(); addEventListener('resize', resize);
+        const pts = Array.from({length:55}, () => ({
+            x: Math.random()*innerWidth, y: Math.random()*innerHeight,
+            r: Math.random()*1.4+0.4,
+            dx:(Math.random()-.5)*.35, dy:(Math.random()-.5)*.35,
+            a: Math.random()
+        }));
+        (function draw() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            pts.forEach(p => {
+                ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+                ctx.fillStyle = `rgba(0,212,255,${p.a*0.45})`; ctx.fill();
+                p.x+=p.dx; p.y+=p.dy;
+                if(p.x<0)p.x=canvas.width;  if(p.x>canvas.width)p.x=0;
+                if(p.y<0)p.y=canvas.height; if(p.y>canvas.height)p.y=0;
+            });
+            requestAnimationFrame(draw);
+        })();
+
+        /* ─── Nav dropdown ─── */
+        function toggleNavDropdown() {
+            const wrap = document.getElementById('navProfileWrap');
+            const dd   = document.getElementById('navDropdown');
+            const open = dd.classList.contains('open');
+            if (open) { wrap.classList.remove('open'); dd.classList.remove('open'); }
+            else      { wrap.classList.add('open');    dd.classList.add('open'); }
+        }
+        document.addEventListener('click', e => {
+            const wrap = document.getElementById('navProfileWrap');
+            const dd   = document.getElementById('navDropdown');
+            if (wrap && dd && !wrap.contains(e.target)) {
+                wrap.classList.remove('open');
+                dd.classList.remove('open');
+            }
+        });
+
+        /* ─── Logout ─── */
+        async function logoutUser() {
+            try {
+                const m = await import('./firebase-config.js');
+                await m.signOut(m.auth);
+                localStorage.removeItem('currentUser');
+                window.location.reload();
+            } catch(e) { console.error(e); }
+        }
+    </script>
+    <script type="module" src="translations.js"></script>
+    <script type="module" src="home.js"></script>
+</body>
+</html>

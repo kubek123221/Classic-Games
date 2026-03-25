@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dołącz do Gry — Klasyczne Gry</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style-join.css">
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="index.html" class="logo">🎮 Klasyczne Gry</a>
+            <div class="nav-right">
+                <span class="username" id="username-nav">Gość</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="kolko-i-krzyzyk.html" class="back-btn">← Powrót do gry</a>
+
+        <div class="page-header">
+            <div class="page-tag">LOBBY</div>
+            <h1>🔗 Dołącz do Gry</h1>
+            <p class="subtitle">Znajdź dostępną grę lub wyszukaj po nicku hosta</p>
+        </div>
+
+        <div class="search-row">
+            <input type="text" id="hostSearch" placeholder="🔍 Szukaj hosta po nicku..." oninput="searchByHost()">
+            <button class="refresh-btn" onclick="loadGames()">↻ Odśwież</button>
+        </div>
+
+        <div class="section-label">DOSTĘPNE GRY PUBLICZNE</div>
+
+        <div class="games-list" id="gamesList">
+            <div class="loading-state">⏳ Ładowanie gier...</div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        resize(); window.addEventListener('resize', resize);
+        const pts = Array.from({length:40}, () => ({
+            x: Math.random()*window.innerWidth, y: Math.random()*window.innerHeight,
+            dx:(Math.random()-.5)*.25, dy:(Math.random()-.5)*.25, a:Math.random()
+        }));
+        (function draw() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            pts.forEach(p => {
+                ctx.beginPath(); ctx.arc(p.x,p.y,1,0,Math.PI*2);
+                ctx.fillStyle=`rgba(0,212,255,${p.a*.4})`; ctx.fill();
+                p.x+=p.dx; p.y+=p.dy;
+                if(p.x<0)p.x=canvas.width; if(p.x>canvas.width)p.x=0;
+                if(p.y<0)p.y=canvas.height; if(p.y>canvas.height)p.y=0;
+            });
+            requestAnimationFrame(draw);
+        })();
+    </script>
+    <script type="module" src="Join.js"></script>
+</body>
+</html>

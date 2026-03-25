@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kółko i Krzyżyk — Klasyczne Gry</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo" data-i18n="logo">🎮 Klasyczne Gry</div>
+            <div class="nav-right">
+                <div class="user-info">
+                    <span class="username" id="username-nav" data-i18n="guest">Gość</span>
+                    <a href="profil.html" class="nav-profile-link" id="navProfileLink" style="display:none;" title="Mój profil">👤</a>
+                </div>
+                <div class="language-selector">
+                    <button class="lang-btn active" data-lang="pl" onclick="changeLanguage('pl')" title="Polski">🇵🇱</button>
+                    <button class="lang-btn" data-lang="en" onclick="changeLanguage('en')" title="English">🇬🇧</button>
+                    <button class="lang-btn" data-lang="de" onclick="changeLanguage('de')" title="Deutsch">🇩🇪</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="index.html" class="back-btn" data-i18n="backToMenu">← Powrót do menu</a>
+
+        
+        <!-- ONLINE: pasek informacji (ukryty domyślnie) -->
+        <div class="online-info-bar" id="onlineInfoBar" style="display:none;">
+            <span id="onlineStatusInfo">🌐 Tryb Online</span>
+            <button class="leave-btn" onclick="leaveOnlineGame(); window.location.href='lobby.html'">← Opuść grę</button>
+        </div>
+
+        <div class="page-header">
+            <h1 data-i18n="tictactoeTitle">⭕ Kółko i Krzyżyk ❌</h1>
+            <p class="subtitle" data-i18n="tictactoeSubtitle">Klasyczna gra dla dwóch graczy</p>
+        </div>
+
+        <div class="game-mode">
+            <button class="mode-btn active" onclick="setGameMode('pvp')" data-i18n="twoPlayers">👥 2 Graczy</button>
+            <button class="mode-btn" onclick="setGameMode('bot')" data-i18n="vsBot">🤖 Gra z Botem</button>
+        </div>
+
+        <div class="difficulty-selector" id="difficultySelector" style="display: none;">
+            <p class="difficulty-label" data-i18n="selectDifficulty">Wybierz poziom trudności:</p>
+            <div class="difficulty-buttons">
+                <button class="difficulty-btn active" data-difficulty="easy" onclick="setDifficulty('easy')" data-i18n="easy">😊 Łatwy</button>
+                <button class="difficulty-btn" data-difficulty="normal" onclick="setDifficulty('normal')" data-i18n="normal">😐 Normalny</button>
+                <button class="difficulty-btn" data-difficulty="hard" onclick="setDifficulty('hard')" data-i18n="hard">😈 Trudny</button>
+            </div>
+        </div>
+
+        <div class="game-info">
+            <span class="current-player" id="gameInfoText">Gracz X zaczyna!</span>
+        </div>
+
+        <div class="board" id="board">
+            <button class="cell" data-index="0"></button>
+            <button class="cell" data-index="1"></button>
+            <button class="cell" data-index="2"></button>
+            <button class="cell" data-index="3"></button>
+            <button class="cell" data-index="4"></button>
+            <button class="cell" data-index="5"></button>
+            <button class="cell" data-index="6"></button>
+            <button class="cell" data-index="7"></button>
+            <button class="cell" data-index="8"></button>
+        </div>
+
+        <div class="controls">
+            <button class="reset-btn" onclick="resetGame()" data-i18n="newGame">Nowa Gra</button>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number" id="xWins">0</div>
+                <div class="stat-label" data-i18n="winsX">Wygrane X</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="draws">0</div>
+                <div class="stat-label" data-i18n="draws">Remisy</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="oWins">0</div>
+                <div class="stat-label" data-i18n="winsO">Wygrane O</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        resize(); window.addEventListener('resize', resize);
+        const pts = Array.from({length:40}, () => ({
+            x: Math.random()*window.innerWidth, y: Math.random()*window.innerHeight,
+            dx: (Math.random()-.5)*.3, dy: (Math.random()-.5)*.3, a: Math.random()
+        }));
+        function draw() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            pts.forEach(p => {
+                ctx.beginPath(); ctx.arc(p.x, p.y, 1, 0, Math.PI*2);
+                ctx.fillStyle = `rgba(0,212,255,${p.a*.4})`; ctx.fill();
+                p.x += p.dx; p.y += p.dy;
+                if (p.x<0) p.x=canvas.width; if (p.x>canvas.width) p.x=0;
+                if (p.y<0) p.y=canvas.height; if (p.y>canvas.height) p.y=0;
+            });
+            requestAnimationFrame(draw);
+        }
+        draw();
+    </script>
+    <script type="module" src="translations.js"></script>
+    <script type="module" src="kolko-i-krzyzyk.js"></script>
+</body>
+</html>

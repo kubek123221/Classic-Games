@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lobby Online — Klasyczne Gry</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style-lobby.css">
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="index.html" class="logo">🎮 Klasyczne Gry</a>
+            <div class="nav-right">
+                <span class="username" id="username-nav">Gość</span>
+                <div class="language-selector">
+                    <button class="lang-btn active" data-lang="pl" onclick="changeLanguage('pl')">🇵🇱</button>
+                    <button class="lang-btn" data-lang="en" onclick="changeLanguage('en')">🇬🇧</button>
+                    <button class="lang-btn" data-lang="de" onclick="changeLanguage('de')">🇩🇪</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="index.html" class="back-btn">← Powrót do menu</a>
+
+        <div class="page-header">
+            <div class="page-tag">ONLINE MULTIPLAYER</div>
+            <h1>🌐 Lobby Gier</h1>
+            <p class="subtitle">Stwórz grę lub dołącz do istniejącej</p>
+        </div>
+
+        <!-- FILTR GRY -->
+        <div class="game-filter">
+            <button class="filter-btn active" data-game="all" onclick="filterGames('all')">🎮 Wszystkie</button>
+            <button class="filter-btn" data-game="tictactoe" onclick="filterGames('tictactoe')">⭕ Kółko i Krzyżyk</button>
+            <!--<button class="filter-btn" data-game="battleship" onclick="filterGames('battleship')">🚢 Statki</button>-->
+        </div>
+
+        <!-- GŁÓWNY LAYOUT -->
+        <div class="lobby-layout">
+
+            <!-- LEWA: Stwórz grę -->
+            <div class="create-panel">
+                <div class="panel-label">STWÓRZ GRĘ</div>
+
+                <div class="field-group">
+                    <label>Wybierz grę</label>
+                    <div class="game-pick-row">
+                        <button class="game-pick active" data-type="tictactoe" onclick="setGameType('tictactoe')">
+                            <span>⭕❌</span>
+                            <span>Kółko i Krzyżyk</span>
+                        </button>
+                        <!--<button class="game-pick" data-type="battleship" onclick="setGameType('battleship')">
+                            <span>🚢</span>
+                            <span>Statki</span>
+                        </button>-->
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label>Nazwa gry</label>
+                    <input type="text" id="gameName" placeholder="Moja gra..." maxlength="30">
+                </div>
+
+                <div class="field-group">
+                    <label>Widoczność</label>
+                    <div class="toggle-row">
+                        <button class="toggle-btn active" id="publicBtn" onclick="setVisibility('public')">🌐 Publiczna</button>
+                        <button class="toggle-btn" id="privateBtn" onclick="setVisibility('private')">🔒 Prywatna</button>
+                    </div>
+                </div>
+
+                <!-- MODYFIKACJE K&K -->
+                <div class="field-group mods-section" id="modsSection">
+                    <label>Modyfikacje <span class="beta-tag">BETA</span></label>
+                    <div class="mods-mini-grid" id="modsGrid">
+                        <!-- wypełniane przez JS -->
+                    </div>
+                </div>
+
+                <button class="btn-create" onclick="createGame()" id="createBtn">
+                    🎮 Stwórz grę
+                </button>
+
+                <div class="not-logged-warn" id="notLoggedWarn" style="display:none;">
+                    ⚠️ <a href="login.html">Zaloguj się</a> aby grać online
+                </div>
+            </div>
+
+            <!-- PRAWA: Lista gier -->
+            <div class="games-panel">
+                <div class="games-panel-top">
+                    <div class="panel-label">DOSTĘPNE GRY</div>
+                    <div class="search-refresh">
+                        <input type="text" id="searchInput" placeholder="🔍 Szukaj hosta..." oninput="filterByHost()">
+                        <button class="refresh-btn" onclick="loadGames()" title="Odśwież">↻</button>
+                    </div>
+                </div>
+
+                <div class="games-list" id="gamesList">
+                    <div class="state-box">⏳ Ładowanie gier...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Szczegóły / Dołącz -->
+    <div class="modal" id="joinModal">
+        <div class="modal-box">
+            <div class="modal-head">
+                <h2 id="modalGameName">Gra</h2>
+                <button class="modal-close" onclick="closeJoinModal()">×</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- wypełniane przez JS -->
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        resize(); window.addEventListener('resize', resize);
+        const pts = Array.from({length:50}, () => ({
+            x:Math.random()*window.innerWidth, y:Math.random()*window.innerHeight,
+            dx:(Math.random()-.5)*.3, dy:(Math.random()-.5)*.3, a:Math.random()
+        }));
+        (function draw() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            pts.forEach(p => {
+                ctx.beginPath(); ctx.arc(p.x,p.y,1.2,0,Math.PI*2);
+                ctx.fillStyle=`rgba(0,212,255,${p.a*.5})`; ctx.fill();
+                p.x+=p.dx; p.y+=p.dy;
+                if(p.x<0)p.x=canvas.width; if(p.x>canvas.width)p.x=0;
+                if(p.y<0)p.y=canvas.height; if(p.y>canvas.height)p.y=0;
+            });
+            requestAnimationFrame(draw);
+        })();
+    </script>
+    <script type="module" src="translations.js"></script>
+    <script type="module" src="lobby.js"></script>
+</body>
+</html>

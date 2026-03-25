@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — Classic Games</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style-login.css">
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="language-selector-top">
+        <button class="lang-btn active" data-lang="pl" onclick="changeLanguage('pl')" title="Polski">🇵🇱</button>
+        <button class="lang-btn" data-lang="en" onclick="changeLanguage('en')" title="English">🇬🇧</button>
+        <button class="lang-btn" data-lang="de" onclick="changeLanguage('de')" title="Deutsch">🇩🇪</button>
+    </div>
+
+    <div class="login-container">
+        <a href="index.html" class="back-btn" data-i18n="backToHome">← Powrót</a>
+
+        <div class="login-box">
+            <div class="login-logo">🎮</div>
+            <h1 data-i18n="welcome">Witaj!</h1>
+            <p class="subtitle" data-i18n="loginSubtitle">Zaloguj się lub utwórz nowe konto</p>
+
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('login')" data-i18n="loginTab">Logowanie</button>
+                <button class="tab" onclick="showTab('register')" data-i18n="registerTab">Rejestracja</button>
+            </div>
+
+            <form id="loginForm" class="form active">
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="loginUsername" placeholder="twoj@email.com" required autocomplete="email">
+                </div>
+                <div class="input-group">
+                    <label data-i18n="password">Hasło</label>
+                    <div class="input-wrap">
+                        <input type="password" id="loginPassword" data-i18n-placeholder="enterPassword" placeholder="Wpisz hasło" required autocomplete="current-password">
+                        <button type="button" class="show-pw" onclick="togglePw('loginPassword', this)">👁</button>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn" data-i18n="loginBtn">Zaloguj się</button>
+                <p class="message" id="loginMessage"></p>
+            </form>
+
+            <form id="registerForm" class="form">
+                <div class="input-group">
+                    <label data-i18n="username">Nazwa użytkownika</label>
+                    <input type="text" id="registerUsername" data-i18n-placeholder="chooseUsername" placeholder="Wybierz nazwę użytkownika" required autocomplete="username">
+                </div>
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="registerEmail" placeholder="twoj@email.com" required autocomplete="email">
+                </div>
+                <div class="input-group">
+                    <label data-i18n="password">Hasło</label>
+                    <div class="input-wrap">
+                        <input type="password" id="registerPassword" data-i18n-placeholder="choosePassword" placeholder="Min. 6 znaków" required autocomplete="new-password">
+                        <button type="button" class="show-pw" onclick="togglePw('registerPassword', this)">👁</button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label data-i18n="confirmPassword">Powtórz hasło</label>
+                    <div class="input-wrap">
+                        <input type="password" id="registerPasswordConfirm" data-i18n-placeholder="repeatPassword" placeholder="Powtórz hasło" required autocomplete="new-password">
+                        <button type="button" class="show-pw" onclick="togglePw('registerPasswordConfirm', this)">👁</button>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn" data-i18n="registerBtn">Zarejestruj się</button>
+                <p class="message" id="registerMessage"></p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function togglePw(id, btn) {
+            const input = document.getElementById(id);
+            if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; }
+            else { input.type = 'password'; btn.textContent = '👁'; }
+        }
+
+        // Canvas bg
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        resize(); window.addEventListener('resize', resize);
+        const pts = Array.from({length:40}, () => ({
+            x: Math.random()*window.innerWidth, y: Math.random()*window.innerHeight,
+            dx: (Math.random()-.5)*.3, dy: (Math.random()-.5)*.3, a: Math.random()
+        }));
+        function draw() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            pts.forEach(p => {
+                ctx.beginPath(); ctx.arc(p.x, p.y, 1.2, 0, Math.PI*2);
+                ctx.fillStyle = `rgba(0,212,255,${p.a*.5})`; ctx.fill();
+                p.x += p.dx; p.y += p.dy;
+                if (p.x<0) p.x=canvas.width; if (p.x>canvas.width) p.x=0;
+                if (p.y<0) p.y=canvas.height; if (p.y>canvas.height) p.y=0;
+            });
+            requestAnimationFrame(draw);
+        }
+        draw();
+    </script>
+    <script type="module" src="translations.js"></script>
+    <script type="module" src="login.js"></script>
+</body>
+</html>
